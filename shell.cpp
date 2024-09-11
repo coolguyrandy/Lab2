@@ -26,18 +26,18 @@ int main () {
         close(pipefd[0]);
         execlp(cmd1[0], cmd1[0], cmd1[1], cmd1[2]);	
     }
-    else
+    else //when else executes, we are in parent
     {
-         cpid2=fork();
+         cpid2=fork(); 
 
-	 if(cpid2 == 0){
+	 if(cpid2 == 0){ //read output from first child
 		 dup2(pipefd[0], STDIN_FILENO);
 		 close(pipefd[0]);
 		 close(pipefd[1]);
 		 execlp(cmd2[0], cmd2[0], cmd2[1], cmd2[2] );
 	 }
 	 else{
-		 close(pipefd[0]);
+		 close(pipefd[0]);//close parent 
 		 close(pipefd[1]);
 	 }
     }
