@@ -16,11 +16,30 @@ int main () {
     int pipefd[2]; //creating pipe, pipefd[0] is read, pipefd[1] is write
     pid_t cpid1;//process ID for children
     pid_t cpid2;
-    char buf;
 
+    pipe(pipefd);
+    cpid1 = fork();
 
-    if (cpid == 0) {    //child writes to pipe
-        close(pipefd[0]);          // Close unused READ 
+    if (cpid1 == 0) {    //child writes to pipe
+        dup2(pipefd[1], STDOUT_FILENO);
+	close(pipefd[1]);
+        close(pipefd[0]);
+        execlp(cmd1[0], cmd1[0], cmd1[1], cmd1[2]);	
+    }
+    else
+    {
+         cpid2=fork();
+
+	 if(cpid2 == 0){
+		 dup2(pipefd[0], STDIN_FILENO);
+		 close(pipefd[0]);
+		 close(pipefd[1]);
+		 execlp(cmd2[0], cmd2[0], cmd2[1], cmd2[2] );
+	 }
+	 else{
+		 close(pipefd[0]);
+		 close(pipefd[1]);
+	 }
     }
 
 
