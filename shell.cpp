@@ -13,6 +13,17 @@ int main () {
     // TODO: add functionality
     // Create pipe
 
+    int pipefd[2]; //creating pipe, pipefd[0] is read, pipefd[1] is write
+    pid_t cpid1;//process ID for children
+    pid_t cpid2;
+    char buf;
+
+
+    if (cpid == 0) {    //child writes to pipe
+        close(pipefd[0]);          // Close unused READ 
+    }
+
+
     // Create child to run first command
     // In child, redirect output to write end of pipe
     // Close the read end of the pipe on the child side.
